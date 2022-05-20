@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<span> {{template "main.html"}} </span>
+
+{{template "page.html"}}
+
+
+
+  <h1>年龄 ：{{.age}} </h1>
+
+  <h1>邮箱： {{.email}}</h1>
+
+
+{{define "page.html"}}
+
+<h1>hahaha page.html</h1>
+
+{{end}}
+
+</body>
+</html>

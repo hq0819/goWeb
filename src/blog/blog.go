@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"goWebF/src/blog/service"
+	"io"
 	"net/http"
+	"os"
 )
 
 var r *gin.Engine = gin.Default()
@@ -24,6 +28,24 @@ func main() {
 	r.GET("/gbook", serviceindex.Gbook)
 	r.GET("/share", serviceindex.Share)
 	r.GET("/info", serviceindex.Info)
+	r.GET("/login", func(context *gin.Context) {
+		context.HTML(200, "login.html", nil)
+	})
+
+	r.POST("/signin", func(context *gin.Context) {
+		file, err := context.FormFile("files")
+		if err != nil {
+			fmt.Println("读取文件失败")
+		}
+		println(file.Filename)
+		open, _ := file.Open()
+
+		create, _ := os.Create("src/files/" + file.Filename)
+		writer := bufio.NewWriter(create)
+		reader := bufio.NewReader(open)
+		io.Copy(writer, reader)
+
+	})
 
 	r.Run(":8080")
 

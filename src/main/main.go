@@ -1,27 +1,43 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"html/template"
+	"fmt"
+	"reflect"
 )
 
+type People interface {
+	Chifan()
+}
+
 type User struct {
-	name  string
-	age   int
-	email string
+	Name  string
+	Age   int
+	Email string
+}
+
+func (u User) Chifan() {
+	fmt.Println("吃饭")
+}
+
+func (u User) GetUsername(e *User) string {
+	return e.Name
 }
 
 func main() {
-	r := gin.Default()
-	pra := func(name string) string {
-		return name + ", hello world"
-	}
 
-	r.GET("/index", func(context *gin.Context) {
-		r.LoadHTMLGlob("src/templates/*")
-		r.SetFuncMap(template.FuncMap{"pra": pra})
-		context.HTML(200, "main.html", User{"heqin", 19, "23423"})
-	})
+	user := User{Name: "heqin", Age: 19, Email: "1234@QQ.COM"}
+	of := reflect.TypeOf(user)
 
-	r.Run(":8080")
+	valueOf := reflect.ValueOf(user)
+	u := valueOf.Interface().(User)
+	fmt.Println(u)
+
+	name, b := of.MethodByName("Chifan")
+	byName := valueOf.MethodByName("Chifan")
+	fmt.Println(byName)
+
+	fmt.Println(name, b)
+
+	fmt.Println(of, valueOf)
+
 }
